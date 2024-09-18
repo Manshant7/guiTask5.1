@@ -1,0 +1,47 @@
+import RPi.GPIO as GPIO
+from tkinter import Tk, Radiobutton, Button, IntVar
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+
+RED_LED = 17
+GREEN_LED = 21
+WHITE_LED = 23
+
+GPIO.setup(RED_LED, GPIO.OUT)
+GPIO.setup(GREEN_LED, GPIO.OUT)
+GPIO.setup(WHITE_LED, GPIO.OUT)
+
+def turn_off_all_leds():
+    GPIO.output(RED_LED, GPIO.LOW)
+    GPIO.output(GREEN_LED, GPIO.LOW)
+    GPIO.output(WHITE_LED, GPIO.LOW)
+
+def control_leds():
+    turn_off_all_leds()
+    selected_led = led_choice.get()
+    
+    if selected_led == 1:
+        GPIO.output(RED_LED, GPIO.HIGH)
+    elif selected_led == 2:
+        GPIO.output(GREEN_LED, GPIO.HIGH)
+    elif selected_led == 3:
+        GPIO.output(WHITE_LED, GPIO.HIGH)
+
+def exit_program():
+    GPIO.cleanup()
+    window.quit()
+
+window = Tk()
+window.title("LED Controller")
+led_choice = IntVar()
+led_choice.set(0)  # Default to no selection
+
+Radiobutton(window, text="Red LED", variable=led_choice, value=1, command=control_leds).pack()
+Radiobutton(window, text="Green LED", variable=led_choice, value=2, command=control_leds).pack()
+Radiobutton(window, text="White LED", variable=led_choice, value=3, command=control_leds).pack()
+
+Button(window, text="Exit", command=exit_program).pack()
+
+
+window.mainloop()
